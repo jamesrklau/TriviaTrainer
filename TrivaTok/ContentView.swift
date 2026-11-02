@@ -111,90 +111,102 @@ struct ContentView: View {
     private var quizView: some View {
         let question = questions[currentIndex]
 
-        return VStack(spacing: 20) {
-            HStack {
-                Text("Question \(currentIndex + 1) of \(questions.count)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                Text(selectedDifficulty?.title ?? "")
-                    .font(.subheadline.bold())
-            }
-
-            ProgressView(
-                value: Double(currentIndex + 1),
-                total: Double(questions.count)
-            )
-
-            Text(question.category)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Text(question.question)
-                .font(.title2.bold())
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-
-            ForEach(answerOptions, id: \.self) { answer in
-                Button {
-                    selectedAnswer = answer
-                } label: {
-                    HStack {
-                        Text(answer)
-                            .multilineTextAlignment(.leading)
-
-                        Spacer()
-
-                        if selectedAnswer != nil &&
-                            answer == questions[currentIndex].correctAnswer {
-                            Image(systemName: "checkmark.circle.fill")
-                        } else if selectedAnswer == answer {
-                            Image(systemName: "xmark.circle.fill")
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(answerBackground(for: answer))
-                    .foregroundStyle(answerForeground(for: answer))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(answerBorder(for: answer), lineWidth: 1)
-                }
-                .disabled(selectedAnswer != nil)
-            }
-
-            if let selectedAnswer {
-                if selectedAnswer == question.correctAnswer {
-                    Label("Correct!", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                } else {
-                    Text("The correct answer is: \(question.correctAnswer)")
+        return ScrollView {
+            VStack(spacing: 20) {
+                HStack {
+                    Text("Question \(currentIndex + 1) of \(questions.count)")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                    
+                    Spacer()
+                    
+                    Text(selectedDifficulty?.title ?? "")
+                        .font(.subheadline.bold())
                 }
-            }
-
-            Spacer()
-
-            Button {
-                advanceQuestion()
-            } label: {
-                Text(
-                    currentIndex == questions.count - 1
-                    ? "See Results"
-                    : "Next Question"
+                
+                ProgressView(
+                    value: Double(currentIndex + 1),
+                    total: Double(questions.count)
                 )
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
+                
+                Text(question.category)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
+                Text(question.question)
+                    .font(.title2.bold())
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                
+                ForEach(answerOptions, id: \.self) { answer in
+                    Button {
+                        selectedAnswer = answer
+                    } label: {
+                        HStack {
+                            Text(answer)
+                                .multilineTextAlignment(.leading)
+                            
+                            Spacer()
+                            
+                            if selectedAnswer != nil &&
+                                answer == questions[currentIndex].correctAnswer {
+                                Image(systemName: "checkmark.circle.fill")
+                            } else if selectedAnswer == answer {
+                                Image(systemName: "xmark.circle.fill")
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(answerBackground(for: answer))
+                        .foregroundStyle(answerForeground(for: answer))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(.plain)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(answerBorder(for: answer), lineWidth: 1)
+                    }
+                    .disabled(selectedAnswer != nil)
+                }
+                
+                if let selectedAnswer {
+                    if selectedAnswer == question.correctAnswer {
+                        Label("Correct!", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    } else {
+                        Text("The correct answer is: \(question.correctAnswer)")
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                
+                if selectedAnswer != nil,
+                   let explanation = ExplanationLibrary.explanation(
+                    for: question
+                   ) {
+                    QuestionBreakdownView(
+                        explanation: explanation
+                    )
+                }
+                
+                Spacer()
+                
+                Button {
+                    advanceQuestion()
+                } label: {
+                    Text(
+                        currentIndex == questions.count - 1
+                        ? "See Results"
+                        : "Next Question"
+                    )
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(selectedAnswer == nil)
             }
-            .buttonStyle(.borderedProminent)
-            .disabled(selectedAnswer == nil)
+            .padding(.bottom)
         }
     }
     
