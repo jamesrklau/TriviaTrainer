@@ -20,14 +20,30 @@ enum TriviaServiceError: LocalizedError {
 struct TriviaService {
     private let baseURL = "https://opentdb.com/api.php"
 
-    func fetchQuestions(amount: Int = 5) async throws -> [TriviaQuestion] {
+    func fetchQuestions(
+        amount: Int = 5,
+        difficulty: TriviaDifficulty? = nil
+    ) async throws -> [TriviaQuestion] {
         var components = URLComponents(string: baseURL)!
 
-        components.queryItems = [
+        
+        var queryItems = [
             URLQueryItem(name: "amount", value: String(amount)),
             URLQueryItem(name: "type", value: "multiple"),
             URLQueryItem(name: "encode", value: "base64")
         ]
+
+        if let difficulty {
+            queryItems.append(
+                URLQueryItem(
+                    name: "difficulty",
+                    value: difficulty.rawValue
+                )
+            )
+        }
+
+        components.queryItems = queryItems
+
 
         guard let url = components.url else {
             throw TriviaServiceError.invalidResponse
