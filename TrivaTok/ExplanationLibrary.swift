@@ -1,19 +1,15 @@
-//
-//  ExplanationLibrary.swift
-//  TrivaTok
-//
-//  Created by Jaime Klau on 11/1/26.
-//
 
 import Foundation
 
 enum ExplanationLibrary {
 
     static let marsAndRomanMythology = QuestionExplanation(
+
         explanation: """
         Mars is named after the Roman god of war. The planet's reddish \
         appearance has historically been associated with blood and warfare.
         """,
+
         reasoningSteps: [
             ReasoningStep(
                 title: "Identify the subject",
@@ -22,6 +18,7 @@ enum ExplanationLibrary {
                 for an astronomical object.
                 """
             ),
+
             ReasoningStep(
                 title: "Find the key clue",
                 detail: """
@@ -29,6 +26,7 @@ enum ExplanationLibrary {
                 Roman mythology.
                 """
             ),
+
             ReasoningStep(
                 title: "Connect the concepts",
                 detail: """
@@ -36,6 +34,7 @@ enum ExplanationLibrary {
                 for the planet.
                 """
             ),
+
             ReasoningStep(
                 title: "Confirm the answer",
                 detail: """
@@ -44,11 +43,35 @@ enum ExplanationLibrary {
                 """
             )
         ],
+
+        relatedFacts: [
+            RelatedFact(
+                title: "Mars has two moons",
+                detail: """
+                Mars has two small moons called Phobos and Deimos. \
+                Their names come from Greek mythology and mean fear \
+                and terror.
+                """
+            ),
+
+            RelatedFact(
+                title: "The Red Planet",
+                detail: """
+                Mars appears reddish because iron minerals in its \
+                surface have oxidized, creating rust-like material.
+                """
+            )
+        ],
+
         takeaway: """
         When trivia questions mention mythology, look for connections \
         to astronomy, history, literature, and familiar names.
-        """
+        """,
+
+        source: .curated,
+        reviewStatus: .reviewed
     )
+
     static func explanation(
         for question: TriviaQuestion
     ) -> QuestionExplanation? {
@@ -65,4 +88,3 @@ enum ExplanationLibrary {
         return nil
     }
 }
-

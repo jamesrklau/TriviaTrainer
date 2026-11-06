@@ -1,20 +1,17 @@
-//
-//  QuestionBreakdownView.swift
-//  TrivaTok
-//
-//  Created by Jaime Klau on 11/1/26.
-//
 
 import SwiftUI
 
 struct QuestionBreakdownView: View {
+
     let explanation: QuestionExplanation
 
     var body: some View {
+
         VStack(alignment: .leading, spacing: 20) {
 
-            // Section 1: Explain the answer
+            // Why This Answer?
             VStack(alignment: .leading, spacing: 8) {
+
                 Label(
                     "Why This Answer?",
                     systemImage: "lightbulb.fill"
@@ -29,8 +26,9 @@ struct QuestionBreakdownView: View {
 
             Divider()
 
-            // Section 2: Break down the reasoning
+            // Break It Down
             VStack(alignment: .leading, spacing: 14) {
+
                 Label(
                     "Break It Down",
                     systemImage: "brain.head.profile"
@@ -44,16 +42,15 @@ struct QuestionBreakdownView: View {
                 ) { index, step in
 
                     HStack(alignment: .top, spacing: 12) {
+
                         Text("\(index + 1)")
                             .font(.subheadline.bold())
                             .foregroundStyle(.white)
                             .frame(width: 28, height: 28)
-                            .background(
-                                Color.blue,
-                                in: Circle()
-                            )
+                            .background(Color.blue, in: Circle())
 
                         VStack(alignment: .leading, spacing: 4) {
+
                             Text(step.title)
                                 .font(.subheadline.bold())
 
@@ -69,10 +66,44 @@ struct QuestionBreakdownView: View {
                 }
             }
 
+            // Explore Further
+            if !explanation.relatedFacts.isEmpty {
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 12) {
+
+                    Label(
+                        "Explore Further",
+                        systemImage: "sparkles"
+                    )
+                    .font(.headline)
+                    .foregroundStyle(.blue)
+
+                    ForEach(explanation.relatedFacts) { fact in
+
+                        VStack(alignment: .leading, spacing: 4) {
+
+                            Text(fact.title)
+                                .font(.subheadline.bold())
+
+                            Text(fact.detail)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(
+                                    horizontal: false,
+                                    vertical: true
+                                )
+                        }
+                    }
+                }
+            }
+
             Divider()
 
-            // Section 3: A memorable takeaway
+            // Remember This
             VStack(alignment: .leading, spacing: 8) {
+
                 Label(
                     "Remember This",
                     systemImage: "bookmark.fill"
@@ -93,6 +124,7 @@ struct QuestionBreakdownView: View {
         )
     }
 }
+
 #Preview {
     ScrollView {
         QuestionBreakdownView(
