@@ -29,3 +29,8 @@ xcuserdata/
 # IDE
 .vscode/
 .idea/
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
